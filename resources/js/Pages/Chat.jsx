@@ -1,17 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Head, useForm } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
 import AppShell from '@/Layouts/AppShell'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
 
-export default function Chat({ categories = [], accounts = [] }) {
-  const [messages, setMessages] = useState([])
+export default function Chat({ history = [] }) {
+  const [messages, setMessages] = useState(
+    history.map(h => ({
+      role: h.role,
+      content: h.content,
+      quick_replies: h.quick_replies || [],
+      parsed: h.parsed
+    }))
+  )
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
-
-  const form = useForm({ message: '' })
+  const [input, setInput] = useState('')
 
   useEffect(() => {
     scrollToBottom()
@@ -21,22 +27,18 @@ export default function Chat({ categories = [], accounts = [] }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const sendMessage = async (e) => {
-    e.preventDefault()
-    if (!form.data.message.trim()) return
+  const sendMessage = async (text) => {
+    if (!text.trim()) return
 
-    const userMessage = form.data.message
-    form.setData('message', '')
+    const userMessage = text.trim()
+    setInput('')
 
     setMessages(prev => [...prev, { role: 'user', content: userMessage }])
     setIsTyping(true)
 
     try {
-      const response = await axios.post(route('chat.process'), {
-        message: userMessage,
-        categories: categories,
-        accounts: accounts,
-        history: messages.slice(-10).map(m => ({ role: m.role, content: m.content }))
+      const response = await axios.post(route('catat.process'), {
+        message: userMessage
       })
 
       const botMessage = response.data.message
@@ -59,13 +61,13 @@ export default function Chat({ categories = [], accounts = [] }) {
     }
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    sendMessage(input)
+  }
+
   const sendQuickReply = (reply) => {
-    form.setData('message', reply)
-    form.submit('post', route('chat.process'), {
-      onSuccess: () => {
-        form.setData('message', '')
-      }
-    })
+    sendMessage(reply)
   }
 
   const welcomeMessage = "Halo! 👋 Saya asisten keuangan keluarga kamu.\n\nKamu bisa catat transaksi dengan format sederhana:\n• \"Makan siang 25rb\"\n• \"Gaji masuk 5jt\"\n• \"Bensin 50rb kemarin\"\n\nAtau tanya langsung apa saja!"
@@ -152,18 +154,18 @@ export default function Chat({ categories = [], accounts = [] }) {
 
         {/* Input Area */}
         <div className="sticky bottom-0 bg-[#f8f9fa] border-t border-[#414754]/10 px-3 py-3">
-          <form onSubmit={sendMessage} className="flex items-center gap-2">
+          <form onSubmit={handleSubmit} className="flex items-center gap-2">
             <input
               ref={inputRef}
               type="text"
-              value={form.data.message}
-              onChange={e => form.setData('message', e.target.value)}
+              value={input}
+              onChange={e => setInput(e.target.value)}
               placeholder="Ketik pesan atau catatan transaksi..."
               className="flex-1 bg-white border border-[#c1c6d6]/30 rounded-full px-4 py-2.5 text-[13px] outline-none focus:border-[#005bbf]/40 focus:ring-2 focus:ring-[#005bbf]/10 transition-all"
             />
             <button
               type="submit"
-              disabled={!form.data.message.trim() || isTyping}
+              disabled={!input.trim() || isTyping}
               className="w-10 h-10 rounded-full bg-[#005bbf] flex items-center justify-center disabled:opacity-40 active:scale-95 transition-all"
             >
               <span className="material-symbols-outlined text-white text-xl">send</span>

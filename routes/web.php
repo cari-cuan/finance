@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AiChatController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
@@ -44,11 +44,10 @@ Route::get('/paywall', function () {
 Route::middleware(['auth', 'licensed'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat');
-    Route::post('/chat/process', [ChatController::class, 'process'])->name('chat.process');
-
     Route::get('/catat', [TransactionController::class, 'index'])->name('catat');
     Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+
+    Route::get('/chat', [AiChatController::class, 'index'])->name('chat');
 
     Route::get('/rekap', [ReportController::class, 'index'])->name('rekap');
     Route::get('/rekap/export', [ReportController::class, 'export'])->name('rekap.export');
@@ -57,6 +56,9 @@ Route::middleware(['auth', 'licensed'])->group(function () {
     Route::post('/vouchers/validate', [CheckoutController::class, 'validateVoucher'])->name('vouchers.validate');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 });
+
+// AI Chat API endpoint (outside licensed middleware to avoid Inertia JSON conflict)
+Route::middleware('auth')->post('/chat/process', [AiChatController::class, 'process'])->name('chat.process');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

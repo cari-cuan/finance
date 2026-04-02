@@ -22,7 +22,7 @@ class ChatController extends Controller
         $categories = Category::all(['id', 'name', 'type', 'icon', 'color']);
         $accounts = Account::where('user_id', auth()->id())->get();
 
-        return Inertia::render('Chat', [
+        return Inertia::render('Catat', [
             'categories' => $categories,
             'accounts' => $accounts,
         ]);
