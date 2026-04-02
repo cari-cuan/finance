@@ -179,7 +179,6 @@ class GroqService
                 ];
             });
 
-        // All transactions for table
         $allTransactions = Transaction::with('category')
             ->where('user_id', $userId)
             ->orderByDesc('transaction_date')
@@ -249,7 +248,6 @@ class GroqService
         $txCount = $ctx['month_tx_count'];
         $savingsRate = $ctx['savings_rate'];
 
-        // Analysis
         $analysis = '';
         if ($ctx['month_income'] > 0) {
             if ($savingsRate >= 30) {
@@ -288,46 +286,36 @@ class GroqService
         })->implode("\n") ?: '| - | - | - | - |';
 
         return <<<PROMPT
-Kamu adalah asisten keuangan keluarga yang ramah dan membantu. Bahasa: Indonesia.
+Kamu adalah asisten keuangan keluarga. Bahasa: Indonesia.
 
 📅 PERIODE: {$monthName} {$year}
 
-═══════════════════════════════════════
-💰 RINGKASAN KEUANGAN
-═══════════════════════════════════════
-💵 Saldo Tersedia: Rp {$balanceFmt}
-📈 Total Pemasukan: Rp {$incomeFmt}
-📉 Total Pengeluaran: Rp {$expenseFmt}
+💵 Saldo: Rp {$balanceFmt}
+📈 Pemasukan Total: Rp {$incomeFmt}
+📉 Pengeluaran Total: Rp {$expenseFmt}
 
 📊 {$monthName} {$year} ({$txCount} transaksi):
 💰 Pemasukan: Rp {$monthIncomeFmt}
 💸 Pengeluaran: Rp {$monthExpenseFmt}
-🏦 Tingkat Tabungan: {$savingsRate}%
+🏦 Tabungan: {$savingsRate}%
 
-🔍 ANALISIS:
-{$analysis}
+🔍 {$analysis}
 
-📋 TRANSAKSI TERAKHIR:
+📋 Transaksi Terakhir:
 {$recentTx}
 
-📈 KATEGORI TERATAS:
+📈 Kategori Teratas:
 {$topCat}
 
-═══════════════════════════════════════
-📊 TABEL TRANSAKSI (50 terakhir)
-═══════════════════════════════════════
+📊 TABEL TRANSAKSI:
 | Tanggal | Tipe | Kategori | Keterangan | Nominal |
 |---------|------|----------|------------|---------|
 {$txTableRows}
 
-═══════════════════════════════════════
-📊 RINGKASAN PER KATEGORI
-═══════════════════════════════════════
+📊 RINGKASAN PER KATEGORI:
 | Kategori | Tipe | Total | Frekuensi |
 |----------|------|-------|-----------|
 {$catTableRows}
-
-═══════════════════════════════════════
 
 ATURAN:
 1. Jika user minta laporan → tampilkan ringkasan dengan emoji & analisis. JANGAN return JSON.
@@ -345,7 +333,7 @@ PENTING:
 - Default type = "expense" kecuali user sebut "pemasukan", "gaji", "masuk", "dapat"
 - "rb"/"ribu"/"k" = ×1000, "jt"/"juta" = ×1000000
 - Jika tidak yakin kategori, gunakan "Lainnya"
-- Gunakan emoji untuk memperindah: 💰💸📦📝💵🕐📊📈📉🏦🔍🌟👍⚠️🚨
+- Gunakan emoji: 💰💸📦📝💵🕐📊📈📉🏦🔍🌟👍⚠️🚨
 - JANGAN pernah mengarang data. Gunakan data yang diberikan.
 PROMPT;
     }
@@ -374,6 +362,7 @@ PROMPT;
 
     protected function extractJson(string $content): ?array
     {
+        // Try code block first
         if (preg_match('/```json\s*(.*?)\s*```/s', $content, $m)) {
             $d = json_decode($m[1], true);
             if ($d) {
@@ -381,6 +370,16 @@ PROMPT;
             }
         }
 
+        // Find JSON object that contains "action" key
+        // Look for the pattern {"action":...}
+        if (preg_match('/\{[^{}]*"action"\s*:\s*"[^"]*"[^{}]*\}/s', $content, $m)) {
+            $d = json_decode($m[0], true);
+            if ($d) {
+                return $d;
+            }
+        }
+
+        // Try to find any JSON object with balanced braces
         $start = strpos($content, '{');
         if ($start === false) {
             return null;
@@ -417,8 +416,10 @@ PROMPT;
                 $depth--;
                 if ($depth === 0) {
                     $d = json_decode(substr($content, $start, $i - $start + 1), true);
-
-                    return $d;
+                    if ($d) {
+                        return $d;
+                    }
+                    break;
                 }
             }
         }
