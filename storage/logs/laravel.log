@@ -1,0 +1,150 @@
+[2026-04-02 09:28:05] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#9 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#9 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#10 {main}
+"} 
+[2026-04-02 09:28:05] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#7 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#8 {main}
+"} 
+[2026-04-02 09:40:16] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#9 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#9 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#10 {main}
+"} 
+[2026-04-02 09:40:16] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#7 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#8 {main}
+"} 
+[2026-04-02 14:52:15] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#9 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(172): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():158}:159}()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#8 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#9 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#10 {main}
+"} 
+[2026-04-02 14:52:15] local.ERROR: Target class [App\Http\Middleware\TrustProxies] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Http\\Middleware\\TrustProxies] does not exist. at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#7 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Http\\Middleware\\TrustProxies\" does not exist at /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct()
+#1 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\\Container\\Container->build()
+#2 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate\\Container\\Container->resolve()
+#3 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\\Foundation\\Application->resolve()
+#4 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate\\Container\\Container->make()
+#5 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(255): Illuminate\\Foundation\\Application->make()
+#6 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(213): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#7 /home/u739061521/domains/twinbrotherstudio.com/public_html/finance/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#8 {main}
+"} 
