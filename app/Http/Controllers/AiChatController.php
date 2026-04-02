@@ -20,6 +20,11 @@ class AiChatController extends Controller
 
     public function index()
     {
+        // Auto delete chat messages older than today
+        ChatMessage::where('user_id', auth()->id())
+            ->whereDate('created_at', '<', now()->startOfDay())
+            ->delete();
+
         $categories = Category::all(['id', 'name', 'type', 'icon', 'color']);
         $accounts = Account::where('user_id', auth()->id())->get();
         $history = ChatMessage::where('user_id', auth()->id())

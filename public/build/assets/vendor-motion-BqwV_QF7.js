@@ -1,4 +1,4 @@
-import{r as T}from"./vendor-inertia-CUiX090b.js";var Gs={exports:{}},le={};/**
+import{r as T}from"./vendor-inertia-Df-XDzCc.js";var Gs={exports:{}},le={};/**
  * @license React
  * react-jsx-runtime.production.min.js
  *

@@ -7,6 +7,75 @@ import axios from 'axios'
 
 const PAGE_SIZE = 10
 
+function renderMessageContent(content) {
+  // Split content by markdown tables
+  const tableRegex = /\|(.+)\|\s*\n\|[-|\s]+\|\s*\n((?:\|.+\|\s*\n?)*)/g
+  const parts = []
+  let lastIndex = 0
+  let match
+
+  while ((match = tableRegex.exec(content)) !== null) {
+    // Add text before table
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', content: content.slice(lastIndex, match.index) })
+    }
+
+    // Parse table
+    const headerRow = match[1].split('|').map(h => h.trim()).filter(Boolean)
+    const bodyRows = match[2].trim().split('\n').map(row =>
+      row.split('|').map(cell => cell.trim()).filter(Boolean)
+    )
+
+    parts.push({ type: 'table', headers: headerRow, rows: bodyRows })
+    lastIndex = match.index + match[0].length
+  }
+
+  // Add remaining text
+  if (lastIndex < content.length) {
+    parts.push({ type: 'text', content: content.slice(lastIndex) })
+  }
+
+  if (parts.length === 1 && parts[0].type === 'text') {
+    return <p className="whitespace-pre-line">{parts[0].content}</p>
+  }
+
+  return (
+    <div className="space-y-3">
+      {parts.map((part, idx) => {
+        if (part.type === 'table') {
+          return (
+            <div key={idx} className="overflow-x-auto rounded-lg border border-[#c1c6d6]/20">
+              <table className="w-full text-[11px] border-collapse">
+                <thead>
+                  <tr className="bg-[#005bbf]/5">
+                    {part.headers.map((h, i) => (
+                      <th key={i} className="px-2 py-1.5 text-left font-bold text-[#005bbf] border-b border-[#c1c6d6]/20 whitespace-nowrap">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {part.rows.map((row, ri) => (
+                    <tr key={ri} className={ri % 2 === 0 ? 'bg-[#f8f9fa]/50' : ''}>
+                      {row.map((cell, ci) => (
+                        <td key={ci} className="px-2 py-1.5 border-b border-[#c1c6d6]/10 whitespace-nowrap">
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        }
+        return <p key={idx} className="whitespace-pre-line">{part.content}</p>
+      })}
+    </div>
+  )
+}
+
 export default function Chat({ history = [] }) {
   const [messages, setMessages] = useState(
     history.map(h => ({
@@ -218,7 +287,7 @@ export default function Chat({ history = [] }) {
                     ? "bg-[#005bbf] text-white rounded-br-md"
                     : "bg-white text-[#191c1d] shadow-sm rounded-bl-md"
                 )}>
-                  <p className="whitespace-pre-line">{msg.content}</p>
+                  {renderMessageContent(msg.content)}
 
                   {msg.quick_replies && msg.quick_replies.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
