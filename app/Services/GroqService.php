@@ -171,13 +171,54 @@ PROMPT;
     protected function extractJsonFromResponse(string $content): ?array
     {
         // Extract JSON from code blocks
-        if (preg_match('/```json\s*(\{.*?\})\s*```/s', $content, $matches)) {
-            return json_decode($matches[1], true);
+        if (preg_match('/```json\s*(.*?)\s*```/s', $content, $matches)) {
+            $decoded = json_decode($matches[1], true);
+            if ($decoded) {
+                return $decoded;
+            }
         }
 
-        // Try to find JSON object in response
-        if (preg_match('/\{.*\}/s', $content, $matches)) {
-            return json_decode($matches[0], true);
+        // Try to find JSON object in response (match balanced braces)
+        $start = strpos($content, '{');
+        if ($start !== false) {
+            $depth = 0;
+            $inString = false;
+            $escapeNext = false;
+            for ($i = $start; $i < strlen($content); $i++) {
+                $char = $content[$i];
+                if ($escapeNext) {
+                    $escapeNext = false;
+
+                    continue;
+                }
+                if ($char === '\\') {
+                    $escapeNext = true;
+
+                    continue;
+                }
+                if ($char === '"') {
+                    $inString = ! $inString;
+
+                    continue;
+                }
+                if ($inString) {
+                    continue;
+                }
+                if ($char === '{') {
+                    $depth++;
+                }
+                if ($char === '}') {
+                    $depth--;
+                    if ($depth === 0) {
+                        $jsonStr = substr($content, $start, $i - $start + 1);
+                        $decoded = json_decode($jsonStr, true);
+                        if ($decoded) {
+                            return $decoded;
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         return null;

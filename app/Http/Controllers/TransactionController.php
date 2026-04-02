@@ -26,7 +26,7 @@ class TransactionController extends Controller
             ->orderByDesc('created_at')
             ->paginate(30);
 
-        return inertia('Chat', [
+        return inertia('Catat', [
             'categories' => Category::all(),
             'accounts' => $user->accounts()->get(),
         ]);
