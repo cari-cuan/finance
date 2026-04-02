@@ -37,7 +37,7 @@ export default function Chat({ history = [] }) {
     setIsTyping(true)
 
     try {
-      const response = await axios.post(route('catat.process'), {
+      const response = await axios.post(route('chat.process'), {
         message: userMessage
       })
 
