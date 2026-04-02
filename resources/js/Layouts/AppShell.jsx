@@ -62,6 +62,7 @@ export default function AppShell({ title, children }) {
         {user && (
           <nav className="fixed bottom-0 left-0 right-0 max-w-screen-sm mx-auto flex justify-around items-center px-4 py-2 bg-white border-t border-[#414754]/15 shadow-[0px_-4px_16px_rgba(25,28,29,0.04)] z-50 rounded-t-xl">
             <NavItem href="/dashboard" label="Dashboard" icon="dashboard" active={url.startsWith('/dashboard')} />
+            <NavItem href="/catat" label="Catat" icon="add_circle" active={url.startsWith('/catat')} />
             <NavItem href="/chat" label="Chat" icon="chat_bubble" active={url.startsWith('/chat')} />
             <NavItem href="/rekap" label="Rekap" icon="history_edu" active={url.startsWith('/rekap') || url.startsWith('/reports')} />
           </nav>

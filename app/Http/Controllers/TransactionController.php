@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -10,13 +10,13 @@ class TransactionController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
+
         // Auto create default account if none exists
         if ($user->accounts()->count() === 0) {
             $user->accounts()->create([
                 'name' => 'Pocket',
                 'type' => 'cash',
-                'balance' => 0
+                'balance' => 0,
             ]);
         }
 
@@ -26,10 +26,9 @@ class TransactionController extends Controller
             ->orderByDesc('created_at')
             ->paginate(30);
 
-        return inertia('Chat', [ 
-            'transactions' => $transactions,
-            'categories' => \App\Models\Category::all(),
-            'accounts' => $user->accounts()->get()
+        return inertia('Chat', [
+            'categories' => Category::all(),
+            'accounts' => $user->accounts()->get(),
         ]);
     }
 

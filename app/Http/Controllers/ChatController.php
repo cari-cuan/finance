@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\Account;
 use App\Models\Category;
-use App\Services\NlpParsingService;
+use App\Services\GroqService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ChatController extends Controller
 {
-    protected $nlpService;
+    protected $groqService;
 
-    public function __construct(NlpParsingService $nlpService)
+    public function __construct(GroqService $groqService)
     {
-        $this->nlpService = $nlpService;
+        $this->groqService = $groqService;
     }
 
     public function index()
     {
-        $categories = Category::all(['id', 'name', 'is_income']);
+        $categories = Category::all(['id', 'name', 'type', 'icon', 'color']);
+        $accounts = Account::where('user_id', auth()->id())->get();
+
         return Inertia::render('Chat', [
-            'categories' => $categories
+            'categories' => $categories,
+            'accounts' => $accounts,
         ]);
     }
 
@@ -29,97 +32,14 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
+            'history' => 'sometimes|array',
         ]);
 
         $message = $request->message;
-        $lowerMessage = strtolower($message);
+        $history = $request->history ?? [];
 
-        // Handle Confirmation
-        if ($lowerMessage === 'ok' && session()->has('pending_transaction')) {
-            return $this->confirmTransaction();
-        }
+        $result = $this->groqService->chat($message, $history);
 
-        if ($lowerMessage === 'batal' && session()->has('pending_transaction')) {
-            session()->forget('pending_transaction');
-            return response()->json([
-                'message' => 'Transaksi dibatalkan. Ada yang bisa saya bantu lagi?',
-                'quick_replies' => []
-            ]);
-        }
-
-        // Parse Message
-        try {
-            $parsed = $this->nlpService->parse($message);
-        } catch (\Exception $e) {
-            \Log::error('NLP Parsing Error: ' . $e->getMessage(), [
-                'message' => $message,
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json([
-                'message' => 'Maaf, saya sedang kesulitan memahami pesan ini. Bisa coba format lain?',
-                'quick_replies' => []
-            ], 500);
-        }
-
-        if (!$parsed || !isset($parsed['amount']) || $parsed['amount'] <= 0) {
-            return response()->json([
-                'message' => 'Maaf, saya tidak menemukan nominal transaksi. Bisa diulangi dengan format seperti "Makan siang 25rb"?',
-                'quick_replies' => []
-            ]);
-        }
-
-        // Store in session for confirmation
-        session(['pending_transaction' => $parsed]);
-
-        $amountFormatted = 'Rp ' . number_format($parsed['amount'], 0, ',', '.');
-        $dateFormatted = \Carbon\Carbon::parse($parsed['transaction_date'])->translatedFormat('d M Y, H:i');
-
-        // Clean description from artifacts like -#manual, +, -, #manual
-        $cleanDesc = trim($parsed['description']);
-        $cleanDesc = preg_replace('/^[-+]/', '', $cleanDesc);          // strip leading +/-
-        $cleanDesc = preg_replace('/#manual/i', '', $cleanDesc);       // strip #manual tag
-        $cleanDesc = trim($cleanDesc) ?: 'Transaksi Manual';
-
-        $isIncome = $parsed['type'] === 'income';
-        $typeEmoji = $isIncome ? '💰' : '💸';
-        $typeLabel = $isIncome ? 'Pemasukan' : 'Pengeluaran';
-
-        $responseMessage =
-            "Oke, saya catat transaksi ini ya:\n" .
-            "━━━━━━━━━━━━━━━━\n" .
-            "{$typeEmoji}  {$typeLabel}\n" .
-            "📦  {$parsed['category_name']}\n" .
-            "📝  {$cleanDesc}\n" .
-            "💵  {$amountFormatted}\n" .
-            "🕐  {$dateFormatted}\n" .
-            "━━━━━━━━━━━━━━━━\n" .
-            "Sudah benar? Ketik **OK** untuk simpan.";
-
-        return response()->json([
-            'message' => $responseMessage,
-            'quick_replies' => ['OK', 'batal'],
-            'parsed' => $parsed
-        ]);
-    }
-
-    private function confirmTransaction()
-    {
-        $data = session('pending_transaction');
-        
-        Transaction::create([
-            'user_id' => auth()->id(),
-            'category_id' => $data['category_id'],
-            'type' => $data['type'],
-            'amount' => $data['amount'],
-            'description' => $data['description'],
-            'transaction_date' => $data['transaction_date'],
-        ]);
-
-        session()->forget('pending_transaction');
-
-        return response()->json([
-            'message' => 'Transaksi berhasil disimpan! ✅',
-            'quick_replies' => []
-        ]);
+        return response()->json($result);
     }
 }

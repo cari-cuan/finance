@@ -1,7 +1,13 @@
 <?php
 
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TransactionController;
+use App\Models\Package;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,30 +37,31 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::get('/paywall', function () {
     return Inertia::render('Paywall', [
-        'packages' => App\Models\Package::where('is_active', true)->get()
+        'packages' => Package::where('is_active', true)->get(),
     ]);
 })->middleware('auth')->name('paywall');
 
 Route::middleware(['auth', 'licensed'])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/chat', [App\Http\Controllers\TransactionController::class, 'index'])->name('chat');
-    Route::post('/transactions', [App\Http\Controllers\TransactionController::class, 'store'])->name('transactions.store');
-
-    Route::get('/rekap', [App\Http\Controllers\ReportController::class, 'index'])->name('rekap');
-    Route::get('/rekap/export', [App\Http\Controllers\ReportController::class, 'export'])->name('rekap.export');
-    Route::post('/rekap/email', [App\Http\Controllers\ReportController::class, 'email'])->name('rekap.email');
-
-    Route::post('/vouchers/validate', [App\Http\Controllers\CheckoutController::class, 'validateVoucher'])->name('vouchers.validate');
-    Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
-
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat');
     Route::post('/chat/process', [ChatController::class, 'process'])->name('chat.process');
+
+    Route::get('/catat', [TransactionController::class, 'index'])->name('catat');
+    Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+
+    Route::get('/rekap', [ReportController::class, 'index'])->name('rekap');
+    Route::get('/rekap/export', [ReportController::class, 'export'])->name('rekap.export');
+    Route::post('/rekap/email', [ReportController::class, 'email'])->name('rekap.email');
+
+    Route::post('/vouchers/validate', [CheckoutController::class, 'validateVoucher'])->name('vouchers.validate');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
-    Route::post('/users/{user}/toggle', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::post('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
 });
 
 Route::get('/reports', function () {
