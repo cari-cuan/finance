@@ -364,22 +364,23 @@ PROMPT;
     {
         // Try code block first
         if (preg_match('/```json\s*(.*?)\s*```/s', $content, $m)) {
-            $d = json_decode($m[1], true);
+            $fixed = $this->fixJsonNewlines($m[1]);
+            $d = json_decode($fixed, true);
             if ($d) {
                 return $d;
             }
         }
 
-        // Find JSON object that contains "action" key
-        // Look for the pattern {"action":...}
+        // Find JSON with action key using regex
         if (preg_match('/\{[^{}]*"action"\s*:\s*"[^"]*"[^{}]*\}/s', $content, $m)) {
-            $d = json_decode($m[0], true);
+            $fixed = $this->fixJsonNewlines($m[0]);
+            $d = json_decode($fixed, true);
             if ($d) {
                 return $d;
             }
         }
 
-        // Try to find any JSON object with balanced braces
+        // Find balanced braces
         $start = strpos($content, '{');
         if ($start === false) {
             return null;
@@ -391,6 +392,7 @@ PROMPT;
 
         for ($i = $start; $i < strlen($content); $i++) {
             $c = $content[$i];
+
             if ($esc) {
                 $esc = false;
 
@@ -409,22 +411,76 @@ PROMPT;
             if ($inStr) {
                 continue;
             }
+
             if ($c === '{') {
                 $depth++;
             }
             if ($c === '}') {
                 $depth--;
                 if ($depth === 0) {
-                    $d = json_decode(substr($content, $start, $i - $start + 1), true);
-                    if ($d) {
+                    $jsonStr = substr($content, $start, $i - $start + 1);
+                    $fixed = $this->fixJsonNewlines($jsonStr);
+                    $d = json_decode($fixed, true);
+                    if ($d && isset($d['action'])) {
                         return $d;
                     }
-                    break;
+
+                    $nextStart = strpos($content, '{', $start + 1);
+                    if ($nextStart !== false) {
+                        $start = $nextStart;
+                        $depth = 0;
+
+                        continue;
+                    }
+
+                    return null;
                 }
             }
         }
 
         return null;
+    }
+
+    protected function fixJsonNewlines(string $json): string
+    {
+        $result = '';
+        $inStr = false;
+        $esc = false;
+
+        for ($i = 0; $i < strlen($json); $i++) {
+            $c = $json[$i];
+
+            if ($esc) {
+                $result .= $c;
+                $esc = false;
+
+                continue;
+            }
+
+            if ($c === '\\') {
+                $result .= $c;
+                $esc = true;
+
+                continue;
+            }
+
+            if ($c === '"') {
+                $inStr = ! $inStr;
+                $result .= $c;
+
+                continue;
+            }
+
+            if ($inStr && ($c === "\n" || $c === "\r")) {
+                $result .= '\\n';
+
+                continue;
+            }
+
+            $result .= $c;
+        }
+
+        return $result;
     }
 
     protected function prepareConfirmation(array $parsed): array
