@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Finance - Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#b2c9fe",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-primary": "#adc7ff",
+              "on-tertiary-container": "#0e0200",
+              "tertiary-fixed-dim": "#ffb691",
+              "on-primary-fixed-variant": "#004493",
+              "surface": "#f8f9fa",
+              "primary-container": "#1a73e8",
+              "on-primary-container": "#ffffff",
+              "on-background": "#191c1d",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#341100",
+              "surface-bright": "#f8f9fa",
+              "tertiary": "#9e4300",
+              "on-secondary": "#ffffff",
+              "on-surface": "#191c1d",
+              "surface-container": "#edeeef",
+              "on-surface-variant": "#414754",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#2e4673",
+              "background": "#f8f9fa",
+              "on-secondary-container": "#3d5481",
+              "surface-container-low": "#f3f4f5",
+              "primary": "#005bbf",
+              "primary-fixed": "#d8e2ff",
+              "on-tertiary-fixed-variant": "#783100",
+              "tertiary-container": "#c55500",
+              "secondary": "#475e8c",
+              "primary-fixed-dim": "#adc7ff",
+              "inverse-surface": "#2e3132",
+              "surface-variant": "#e1e3e4",
+              "outline": "#727785",
+              "outline-variant": "#c1c6d6",
+              "on-secondary-fixed": "#001a41",
+              "inverse-on-surface": "#f0f1f2",
+              "surface-dim": "#d9dadb",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#001a41",
+              "surface-container-high": "#e7e8e9",
+              "tertiary-fixed": "#ffdbcb",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed": "#d8e2ff",
+              "surface-tint": "#005bc0",
+              "secondary-fixed-dim": "#afc7fb",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f8f9fa] dark:bg-[#191c1d] opacity-80 backdrop-blur-md flex items-center justify-between px-4 h-14 w-full">
+<div class="flex items-center gap-3">
+<button class="text-[#1A73E8] dark:text-[#4791ff] active:scale-95 duration-150">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-manrope text-lg font-bold text-[#191c1d] dark:text-[#f8f9fa] tracking-tight">Precision Finance</h1>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">account_balance_wallet</span>
+</div>
+</header>
+<!-- Main Content: Chat Interface -->
+<main class="flex-grow pt-20 pb-24 px-4 flex flex-col gap-6 max-w-2xl mx-auto w-full">
+<!-- Date Indicator -->
+<div class="flex justify-center">
+<span class="bg-surface-container-high px-3 py-1 rounded-lg font-label text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Today</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-1">
+<div class="bg-primary text-on-primary px-4 py-2.5 rounded-xl rounded-tr-none shadow-sm max-w-[80%]">
+<p class="font-body text-sm">beli ayam 5k</p>
+</div>
+<span class="font-label text-[10px] text-on-surface-variant mr-1">10:42 AM</span>
+</div>
+<!-- Bot Response -->
+<div class="flex flex-col items-start gap-1">
+<div class="flex gap-2 items-start max-w-[90%]">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Parsing Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/15 rounded-xl shadow-[0px_12px_32px_rgba(25,28,29,0.04)] overflow-hidden">
+<div class="bg-surface-container-low px-4 py-2 flex items-center justify-between">
+<span class="font-label text-[11px] font-bold text-primary uppercase tracking-tight">Transaction Detected</span>
+<span class="material-symbols-outlined text-primary text-xs">analytics</span>
+</div>
+<div class="p-4 space-y-3">
+<!-- Data Grid -->
+<div class="grid grid-cols-2 gap-x-6 gap-y-3">
+<div>
+<label class="block font-label text-[10px] text-on-surface-variant font-medium">Jenis</label>
+<p class="font-body text-[13px] font-semibold text-on-surface">Pengeluaran</p>
+</div>
+<div>
+<label class="block font-label text-[10px] text-on-surface-variant font-medium">Kategori</label>
+<p class="font-body text-[13px] font-semibold text-on-surface">Food &amp; Drink</p>
+</div>
+<div>
+<label class="block font-label text-[10px] text-on-surface-variant font-medium">Subkategori</label>
+<p class="font-body text-[13px] font-semibold text-on-surface">Grocery</p>
+</div>
+<div>
+<label class="block font-label text-[10px] text-on-surface-variant font-medium">Nominal</label>
+<p class="font-body text-[13px] font-bold text-error">Rp 5.000</p>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant/10">
+<label class="block font-label text-[10px] text-on-surface-variant font-medium">Deskripsi</label>
+<p class="font-body text-[13px] text-on-surface">beli ayam</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex p-3 gap-2 bg-surface-container-low/50">
+<button class="flex-1 bg-gradient-to-br from-primary-container to-primary text-white py-2 rounded-lg font-label text-xs font-bold active:scale-95 transition-transform">
+                                OK
+                            </button>
+<button class="flex-1 bg-surface-container-high text-on-surface py-2 rounded-lg font-label text-xs font-bold active:scale-95 transition-transform">
+                                Batal
+                            </button>
+</div>
+</div>
+<span class="font-label text-[10px] text-on-surface-variant ml-1">10:42 AM</span>
+</div>
+</div>
+</div>
+<!-- Assistant Suggestions -->
+<div class="flex flex-wrap gap-2 mt-2">
+<button class="px-3 py-1.5 rounded-full border border-outline-variant/30 bg-surface-container-lowest text-[11px] font-semibold text-on-surface-variant hover:bg-surface-container transition-colors">
+                Lihat Laporan Mingguan
+            </button>
+<button class="px-3 py-1.5 rounded-full border border-outline-variant/30 bg-surface-container-lowest text-[11px] font-semibold text-on-surface-variant hover:bg-surface-container transition-colors">
+                Sisa Budget Food
+            </button>
+</div>
+</main>
+<!-- Chat Input Area -->
+<div class="fixed bottom-16 left-0 w-full px-4 py-3 bg-surface/80 backdrop-blur-lg">
+<div class="max-w-2xl mx-auto flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-2xl">
+<button class="text-on-surface-variant">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<input class="bg-transparent border-none focus:ring-0 flex-grow font-body text-sm py-1.5 placeholder:text-on-surface-variant/50" placeholder="Type message..." type="text"/>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center active:scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-[#ffffff] dark:bg-[#191c1d] border-t border-[#414754]/15 shadow-[0px_-4px_16px_rgba(25,28,29,0.04)] z-50 rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-[#a6abb9] px-3 py-1 hover:text-[#1A73E8] dark:hover:text-[#4791ff] transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#f3f4f5] dark:bg-[#2a2d2e] text-[#1A73E8] dark:text-[#4791ff] rounded-lg px-3 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-[#a6abb9] px-3 py-1 hover:text-[#1A73E8] dark:hover:text-[#4791ff] transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Recap</span>
+</a>
+</nav>
+</body></html>

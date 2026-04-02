@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Finance Assistant - Chat</title>
+<!-- Google Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#5c4300",
+              "surface-container-high": "#e7e8e9",
+              "surface-container-highest": "#e1e3e4",
+              "on-primary-fixed-variant": "#004493",
+              "surface": "#f8f9fa",
+              "error-container": "#ffdad6",
+              "error": "#ba1a1a",
+              "on-secondary-fixed-variant": "#005320",
+              "primary": "#005bbf",
+              "inverse-on-surface": "#f0f1f2",
+              "tertiary-fixed": "#ffdea0",
+              "on-primary-fixed": "#001a41",
+              "outline-variant": "#c1c6d6",
+              "primary-container": "#1a73e8",
+              "on-primary": "#ffffff",
+              "surface-dim": "#d9dadb",
+              "on-secondary-fixed": "#002108",
+              "on-background": "#191c1d",
+              "tertiary-container": "#987000",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#f8f9fa",
+              "secondary-container": "#86f898",
+              "on-tertiary-fixed": "#261a00",
+              "inverse-primary": "#adc7ff",
+              "outline": "#727785",
+              "surface-container": "#edeeef",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#00722f",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#adc7ff",
+              "tertiary": "#795900",
+              "surface-variant": "#e1e3e4",
+              "primary-fixed": "#d8e2ff",
+              "inverse-surface": "#2e3132",
+              "on-tertiary-container": "#ffffff",
+              "surface-tint": "#005bc0",
+              "tertiary-fixed-dim": "#fbbc06",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#ffffff",
+              "background": "#f8f9fa",
+              "secondary": "#006e2c",
+              "on-surface": "#191c1d",
+              "on-secondary": "#ffffff",
+              "on-surface-variant": "#414754",
+              "surface-container-low": "#f3f4f5",
+              "secondary-fixed": "#89fa9b",
+              "secondary-fixed-dim": "#6ddd81"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        font-size: 20px;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa;
+        color: #191c1d;
+      }
+      .chat-gradient {
+        background: linear-gradient(135deg, #1a73e8 0%, #005bc0 100%);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-slate-50 dark:bg-slate-950 flex justify-between items-center w-full px-6 h-14 fixed top-0 z-40 border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<button class="hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors p-1.5 rounded-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">menu</span>
+</button>
+<h1 class="font-manrope font-bold text-lg tracking-tight text-slate-900 dark:text-slate-50">Asisten Keuangan</h1>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/20">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a professional man with a friendly expression in clean studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIfv19hst4iVMRv8UL8D8VDo4yTaDPqHbLiUPkqkoJFAB_3vm2HV5hcq1L0wlYGrP8JFaKwxHB_vXrSFwHm80F-XgN-gxiMF-rpr9xtPPWrwxB9qrZhErxJQlkPn05TACE4Pk5CsrD8KeI-Es39V2sRxvjLZLTIdgOftclXkmmEpq2raHUH_L3Td4VkHvG-cYTsdp6dn8bMzeVbdMxVgkX7V0i1E0jX-x71433V8VjKgtVIdUQ59nJBhNhwFK8vrJemVuuumOvI0o"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-16 pb-36 px-4 max-w-xl mx-auto w-full flex flex-col gap-6">
+<!-- Date Marker -->
+<div class="flex justify-center">
+<span class="font-label text-[10px] font-semibold text-on-surface-variant/70 tracking-widest uppercase bg-surface-container-low px-3 py-1 rounded-md">Hari ini</span>
+</div>
+<!-- Chat History -->
+<div class="flex flex-col gap-4">
+<!-- User Message Bubble -->
+<div class="flex justify-end w-full">
+<div class="chat-gradient text-on-primary px-4 py-2.5 max-w-[85%] shadow-sm rounded-lg rounded-tr-none">
+<p class="font-body text-[13px] leading-snug">beli ayam 5k</p>
+<div class="flex justify-end mt-1">
+<span class="text-[9px] opacity-70 font-medium">14:02</span>
+</div>
+</div>
+</div>
+<!-- Bot Message Bubble -->
+<div class="flex justify-start w-full">
+<div class="bg-white text-on-surface px-4 py-4 max-w-[90%] rounded-lg rounded-tl-none border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-1.5 mb-2.5">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-headline font-bold text-[10px] text-primary uppercase tracking-wider">AI Assistant</span>
+</div>
+<p class="font-body text-[13px] leading-normal mb-3 text-on-surface/90">Saya baca data ini sebagai:</p>
+<!-- Structured Data Block -->
+<div class="bg-surface-container-low/50 rounded-md p-3 flex flex-col gap-1.5 mb-3 border border-outline-variant/10">
+<div class="flex justify-between items-center">
+<span class="font-label text-[11px] text-on-surface-variant">Jenis</span>
+<span class="font-body text-[11px] font-medium">Pengeluaran</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[11px] text-on-surface-variant">Kategori</span>
+<span class="font-body text-[11px] font-medium">Makanan &amp; Minuman</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[11px] text-on-surface-variant">Subkategori</span>
+<span class="font-body text-[11px] font-medium">Makan berat</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[11px] text-on-surface-variant">Deskripsi</span>
+<span class="font-body text-[11px] font-medium italic text-primary">Ayam</span>
+</div>
+<div class="flex justify-between items-center pt-1.5 border-t border-outline-variant/10 mt-0.5">
+<span class="font-label text-[11px] font-bold text-on-surface-variant">Nominal</span>
+<span class="font-headline text-[13px] font-bold text-error">Rp5.000</span>
+</div>
+</div>
+<p class="font-body text-[13px] leading-normal text-on-surface/90">Ketik <span class="font-bold text-primary">OK</span> untuk simpan atau <span class="font-bold text-on-surface-variant">batal</span> untuk membatalkan.</p>
+<div class="flex justify-start mt-2">
+<span class="text-[9px] text-on-surface-variant/50 font-medium">14:02</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Interface (Floating Glass) -->
+<div class="fixed bottom-0 left-0 right-0 z-30 px-4 pb-6 pointer-events-none">
+<div class="max-w-xl mx-auto flex flex-col gap-3 pointer-events-auto">
+<!-- Quick Reply Pills -->
+<div class="flex justify-center gap-2">
+<button class="bg-primary text-on-primary px-5 py-2 rounded-md font-label text-[11px] font-bold shadow-md hover:brightness-110 transition-all active:scale-95">
+                    OK
+                </button>
+<button class="bg-white text-on-surface-variant px-5 py-2 rounded-md font-label text-[11px] font-bold border border-outline-variant shadow-sm hover:bg-surface-container-low transition-colors active:scale-95">
+                    Batal
+                </button>
+</div>
+<!-- Chat Input Field -->
+<div class="bg-white rounded-lg p-1.5 shadow-md border border-outline-variant/20 flex items-center gap-2">
+<button class="p-1.5 text-on-surface-variant/70 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+</button>
+<input class="flex-grow bg-transparent border-none focus:ring-0 font-body text-[13px] text-on-surface placeholder:text-on-surface-variant/40 py-1" placeholder="Ketik pesan..." type="text"/>
+<button class="chat-gradient w-9 h-9 rounded-md flex items-center justify-center text-on-primary shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-center px-4 pb-4 pointer-events-none">
+<div class="bg-white/95 backdrop-blur-md border border-outline-variant/10 fixed bottom-4 left-4 right-4 max-w-xl mx-auto rounded-xl shadow-lg flex justify-between items-center px-8 py-2.5 pointer-events-auto">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors tap-highlight-transparent active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="grid_view">grid_view</span>
+<span class="font-manrope font-bold text-[9px] tracking-tight uppercase mt-0.5">Home</span>
+</a>
+<!-- Chat (Active) -->
+<a class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity tap-highlight-transparent active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-manrope font-bold text-[9px] tracking-tight uppercase mt-0.5">Chat</span>
+</a>
+<!-- Recap -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors tap-highlight-transparent active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="analytics">analytics</span>
+<span class="font-manrope font-bold text-[9px] tracking-tight uppercase mt-0.5">Recap</span>
+</a>
+</div>
+</nav>
+</body></html>

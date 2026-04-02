@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Finance - Secure Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#b2c9fe",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-primary": "#adc7ff",
+              "on-tertiary-container": "#0e0200",
+              "tertiary-fixed-dim": "#ffb691",
+              "on-primary-fixed-variant": "#004493",
+              "surface": "#f8f9fa",
+              "primary-container": "#1a73e8",
+              "on-primary-container": "#ffffff",
+              "on-background": "#191c1d",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#341100",
+              "surface-bright": "#f8f9fa",
+              "tertiary": "#9e4300",
+              "on-secondary": "#ffffff",
+              "on-surface": "#191c1d",
+              "surface-container": "#edeeef",
+              "on-surface-variant": "#414754",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#2e4673",
+              "background": "#f8f9fa",
+              "on-secondary-container": "#3d5481",
+              "surface-container-low": "#f3f4f5",
+              "primary": "#005bbf",
+              "primary-fixed": "#d8e2ff",
+              "on-tertiary-fixed-variant": "#783100",
+              "tertiary-container": "#c55500",
+              "secondary": "#475e8c",
+              "primary-fixed-dim": "#adc7ff",
+              "inverse-surface": "#2e3132",
+              "surface-variant": "#e1e3e4",
+              "outline": "#727785",
+              "outline-variant": "#c1c6d6",
+              "on-secondary-fixed": "#001a41",
+              "inverse-on-surface": "#f0f1f2",
+              "surface-dim": "#d9dadb",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#001a41",
+              "surface-container-high": "#e7e8e9",
+              "tertiary-fixed": "#ffdbcb",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed": "#d8e2ff",
+              "surface-tint": "#005bc0",
+              "secondary-fixed-dim": "#afc7fb",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #1a73e8 0%, #005bbf 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed">
+<div class="min-h-screen flex flex-col md:flex-row">
+<!-- Branding & Texture Side -->
+<div class="hidden md:flex md:w-1/2 kinetic-gradient relative overflow-hidden items-center justify-center p-12">
+<div class="absolute inset-0 opacity-10" data-alt="Abstract digital grid with glowing blue nodes and lines representing a high-speed global financial network with motion blur" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUVtcm74j8YfzrxzXxLgdUzInxw0Arn-JgJgcD6x1OnpGC1Ydo0wpByevyYh3hY3bSpVrGrpVCWINdA8_YbtA4NzOCDLIyMY-N2Vc2WD2TnM56DE_CRpyDyqmYt4Jto3Y5m6ynXTK5X2sBF8TKaIpDSNZ4sOVa3uOxvi16tlXUFtwL3yb1ueTQzjogWmbS1-3pH7J-0AObytp6msnYPyn7O-F2VV8ObU3DyreLxoxU1VrNzaY9aTFcr5rXqtNsQeVatFZxvYdbS6I'); background-size: cover; background-position: center;"></div>
+<div class="relative z-10 max-w-md">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 bg-surface-container-lowest rounded-lg flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-primary" data-icon="auto_graph">auto_graph</span>
+</div>
+<span class="text-3xl font-extrabold tracking-tighter text-surface-container-lowest">Lumina Finance</span>
+</div>
+<h1 class="text-4xl font-extrabold text-surface-container-lowest leading-tight tracking-tight mb-4">
+                    Precision analytics for the modern ledger.
+                </h1>
+<p class="text-surface-container-lowest/80 text-sm font-medium leading-relaxed">
+                    Access high-velocity financial tools and real-time market insights with zero friction.
+                </p>
+<div class="mt-12 grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest/10 backdrop-blur-md p-4 rounded-xl">
+<span class="text-surface-container-lowest font-bold text-xl block">99.9%</span>
+<span class="text-surface-container-lowest/60 text-[10px] uppercase tracking-widest font-bold">Uptime Sla</span>
+</div>
+<div class="bg-surface-container-lowest/10 backdrop-blur-md p-4 rounded-xl">
+<span class="text-surface-container-lowest font-bold text-xl block">&lt; 12ms</span>
+<span class="text-surface-container-lowest/60 text-[10px] uppercase tracking-widest font-bold">Latency</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Login Form Side -->
+<div class="flex-1 flex flex-col items-center justify-center p-6 sm:p-12 bg-surface">
+<div class="w-full max-w-[360px] space-y-8">
+<!-- Mobile Logo -->
+<div class="md:hidden flex items-center gap-2 mb-10">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_graph">auto_graph</span>
+<span class="text-xl font-extrabold tracking-tight">Lumina Finance</span>
+</div>
+<div class="space-y-2">
+<h2 class="text-2xl font-extrabold text-on-surface tracking-tight">Secure Login</h2>
+<p class="text-on-surface-variant text-sm font-medium">Enter your credentials to access the ledger.</p>
+</div>
+<form class="space-y-4">
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest px-1" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg" data-icon="mail">mail</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2.5 pl-10 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-high transition-all outline-none text-on-surface placeholder:text-on-surface-variant/40" id="email" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center px-1">
+<label class="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest" for="password">Password</label>
+<a class="text-[11px] font-bold text-primary hover:underline" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg" data-icon="lock">lock</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2.5 pl-10 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-high transition-all outline-none text-on-surface placeholder:text-on-surface-variant/40" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="w-full kinetic-gradient text-on-primary font-bold py-3 rounded-lg text-sm transition-transform active:scale-95 shadow-sm" type="submit">
+                        Sign In
+                    </button>
+</form>
+<div class="relative py-2">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-on-surface-variant/10"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="bg-surface px-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Or continue with</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface py-2.5 rounded-lg text-xs font-bold transition-colors">
+<img alt="Google Logo" class="w-4 h-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy76bysVzjsiZRVE9-s7g7A3KsplpaVeOsTd6cAS4B-eOiaSSlEUuYnNIeU5np8N2FXG9JpiekyrZl54sH5gZycv7uTXtvKu5rKr9yLeuxesiZKwgz-oDgAKpL426OmK36sMUPwxG6w-9hGJFBrAKq_4ti9gC98bYedJJ62nK_kxttCc-Ykksxu6gadh56A77-aBGUPUjvQ7wdtv5HadWdY1mEaocIPzqPqXlRD1UL9zQhYV4ehsYagm0_ypcPKDxpRvGe1zXPAgc"/>
+                        Google
+                    </button>
+<button class="flex items-center justify-center gap-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface py-2.5 rounded-lg text-xs font-bold transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="terminal" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                        SSO
+                    </button>
+</div>
+<p class="text-center text-[12px] font-medium text-on-surface-variant">
+                    Don't have an account? 
+                    <a class="text-primary font-bold hover:underline" href="#">Register</a>
+</p>
+<!-- Footer Links (Density focused) -->
+<div class="pt-10 flex justify-center gap-6">
+<a class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms</a>
+<a class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest hover:text-primary transition-colors" href="#">Security</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Layering Effect (Subtle) -->
+<div class="fixed bottom-0 right-0 p-8 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary" data-icon="grid_view" style="font-variation-settings: 'wght' 100;">grid_view</span>
+</div>
+</body></html>

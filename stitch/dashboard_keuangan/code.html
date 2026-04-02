@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Finance - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#b2c9fe",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-primary": "#adc7ff",
+                        "on-tertiary-container": "#0e0200",
+                        "tertiary-fixed-dim": "#ffb691",
+                        "on-primary-fixed-variant": "#004493",
+                        "surface": "#f8f9fa",
+                        "primary-container": "#1a73e8",
+                        "on-primary-container": "#ffffff",
+                        "on-background": "#191c1d",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#341100",
+                        "surface-bright": "#f8f9fa",
+                        "tertiary": "#9e4300",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "surface-container": "#edeeef",
+                        "on-surface-variant": "#414754",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#2e4673",
+                        "background": "#f8f9fa",
+                        "on-secondary-container": "#3d5481",
+                        "surface-container-low": "#f3f4f5",
+                        "primary": "#005bbf",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#783100",
+                        "tertiary-container": "#c55500",
+                        "secondary": "#475e8c",
+                        "primary-fixed-dim": "#adc7ff",
+                        "inverse-surface": "#2e3132",
+                        "surface-variant": "#e1e3e4",
+                        "outline": "#727785",
+                        "outline-variant": "#c1c6d6",
+                        "on-secondary-fixed": "#001a41",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#001a41",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed": "#ffdbcb",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#d8e2ff",
+                        "surface-tint": "#005bc0",
+                        "secondary-fixed-dim": "#afc7fb",
+                        "on-tertiary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "0.75rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-kinetic-gradient {
+            background: linear-gradient(135deg, #1a73e8 0%, #005bbf 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-[#f8f9fa] dark:bg-[#191c1d] opacity-80 backdrop-blur-md">
+<nav class="flex items-center justify-between px-4 h-14 w-full">
+<div class="flex items-center gap-2">
+<span class="text-lg font-bold text-[#191c1d] dark:text-[#f8f9fa] font-headline tracking-tight">Precision Finance</span>
+</div>
+<div class="hidden md:flex items-center space-x-6">
+<a class="font-manrope title-sm font-semibold tracking-tight text-[#1A73E8] font-bold" href="#">Dashboard</a>
+<a class="font-manrope title-sm font-semibold tracking-tight text-[#414754] dark:text-[#a6abb9] hover:bg-[#f3f4f5] dark:hover:bg-[#2a2d2e] transition-colors" href="#">Chat</a>
+<a class="font-manrope title-sm font-semibold tracking-tight text-[#414754] dark:text-[#a6abb9] hover:bg-[#f3f4f5] dark:hover:bg-[#2a2d2e] transition-colors" href="#">Recap</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-on-surface-variant active:scale-95 duration-150" data-icon="search">search</button>
+<div class="h-8 w-8 rounded-lg overflow-hidden bg-surface-container-high">
+<img alt="User" class="w-full h-full object-cover" data-alt="professional male portrait with soft studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDON6Vr4ounn0XUvzgwPc4aXGBADSdnTU0R88Leg28ZBMzNmGMIulGKlMiqnn2JhgI-ybwwNLph417mZ1kTbx5TiiIWDZnp-RloYotzXwM4KRV4fjbc53ntQGBLmKDIbUNPzNCi0_r4WGfxuvT6IzAw6cU4vqqFhpS1Sw-IaRnDA0em2oBnRo5MKN8VBW6j9Tt4wf0oEN_NS_ZTZaA8LjC6NU99uVjBRrZ9hfxjYyOTxHX1lAgvyB7AsT3DcCffDKT0VLuUZMnhIY"/>
+</div>
+</div>
+</nav>
+</header>
+<main class="pt-20 pb-24 px-4 max-w-4xl mx-auto space-y-4">
+<!-- Ultra Compact 1-Row Stats -->
+<div class="bg-surface-container-low rounded-xl p-3 flex justify-between items-center gap-2">
+<div class="flex-1 bg-surface-container-lowest p-2 rounded-lg text-center">
+<p class="text-[10px] font-bold text-on-surface-variant leading-tight">INCOME</p>
+<p class="text-sm font-extrabold text-primary">$4,250.00</p>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-2 rounded-lg text-center">
+<p class="text-[10px] font-bold text-on-surface-variant leading-tight">EXPENSE</p>
+<p class="text-sm font-extrabold text-error">$2,105.80</p>
+</div>
+<div class="flex-1 bg-kinetic-gradient p-2 rounded-lg text-center">
+<p class="text-[10px] font-bold text-on-primary/70 leading-tight">BALANCE</p>
+<p class="text-sm font-extrabold text-on-primary">$12,844.20</p>
+</div>
+</div>
+<!-- Bento Grid for Core Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Top 3 Expenses Progress Bars -->
+<section class="bg-surface-container-low p-4 rounded-xl space-y-3">
+<h3 class="text-[11px] font-extrabold uppercase tracking-widest text-on-surface-variant">Top 3 Expenses</h3>
+<div class="space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold">
+<span>Housing</span>
+<span>$1,200 / $1,500</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 80%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold">
+<span>Groceries</span>
+<span>$450 / $500</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container" style="width: 90%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold">
+<span>Entertainment</span>
+<span>$150 / $100</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: 100%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Alerts & Bills -->
+<div class="space-y-4">
+<!-- Next Bill -->
+<div class="bg-surface-container-lowest p-3 rounded-lg flex items-center gap-3">
+<div class="bg-surface-container-low h-10 w-10 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_today">calendar_today</span>
+</div>
+<div class="flex-1">
+<p class="text-[10px] font-bold text-on-surface-variant">NEXT BILL</p>
+<p class="text-sm font-extrabold">Cloud Storage</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface">Apr 24</p>
+<p class="text-xs font-extrabold">$12.99</p>
+</div>
+</div>
+<!-- Budget Alert -->
+<div class="bg-error-container/50 p-3 rounded-lg border-l-4 border-error flex items-start gap-3">
+<span class="material-symbols-outlined text-error text-lg" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<p class="text-[11px] font-bold text-on-error-container">BUDGET ALERT</p>
+<p class="text-xs text-on-error-container font-medium leading-snug">Dining Out limit exceeded by <span class="font-bold">$42.50</span> this week.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Upgrade Banner -->
+<section class="relative bg-[#191c1d] rounded-xl overflow-hidden p-5 flex items-center">
+<div class="absolute inset-0 opacity-40">
+<img alt="background" class="w-full h-full object-cover" data-alt="abstract tech connections data lines and points on dark blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQE78RvuwCf_17NyLTWv4YmFh8_64ahNDabhtYpuaQYnoscVyVxlSoaE0_xaKeiC3ydNVVbKzy39aQzRipYtstwV2PcbyV9jaeU9hZSY1IVaSo22HhHHmuWVlIHmjvgzyFV2pLGP-ocsOisHq6wXClKslvbCwjJUi9hmxC4CG7eUiCMM7T9YJIAuJuB4XSW_O3W-sDtFLkfA_XOl3zXtg21-LudBekCc1UxN51rQaT1MJOYQ31hOj8dikX5ZTpcjG0qC3c7JVPbN4"/>
+</div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center w-full gap-4">
+<div class="text-center md:text-left">
+<h2 class="text-on-primary font-extrabold text-lg tracking-tight">Unlock AI Insights</h2>
+<p class="text-[11px] text-primary-fixed leading-tight max-w-[200px]">Get automated expense categorization and wealth growth projections.</p>
+</div>
+<button class="bg-kinetic-gradient text-on-primary text-[11px] font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wider active:scale-90 duration-200">
+                    Upgrade to Pro
+                </button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-[#ffffff] dark:bg-[#191c1d] border-t border-[#414754]/15 shadow-[0px_-4px_16px_rgba(25,28,29,0.04)] z-50 rounded-t-lg">
+<a class="flex flex-col items-center justify-center bg-[#f3f4f5] dark:bg-[#2a2d2e] text-[#1A73E8] dark:text-[#4791ff] rounded-lg px-3 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-[#a6abb9] px-3 py-1 hover:text-[#1A73E8] dark:hover:text-[#4791ff] transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-[#a6abb9] px-3 py-1 hover:text-[#1A73E8] dark:hover:text-[#4791ff] transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-manrope label-sm font-medium text-[10px]">Recap</span>
+</a>
+</nav>
+</body></html>
