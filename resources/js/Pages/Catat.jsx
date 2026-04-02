@@ -85,7 +85,7 @@ export default function Chat({ categories = [], accounts = [] }) {
         )}
       </AnimatePresence>
 
-      <div className="max-w-md mx-auto pt-2 pb-10 space-y-4">
+      <div className="pt-2 pb-10 space-y-4">
         <div className="bg-white rounded-[20px] shadow-[0px_4px_24px_rgba(25,28,29,0.04)] border border-[#c1c6d6]/20 overflow-hidden">
           
           {/* Segmented Tab Toggle */}

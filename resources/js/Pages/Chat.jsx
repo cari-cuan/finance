@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Head } from '@inertiajs/react'
 import AppShell from '@/Layouts/AppShell'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
+
+const PAGE_SIZE = 10
 
 export default function Chat({ history = [] }) {
   const [messages, setMessages] = useState(
@@ -15,16 +17,103 @@ export default function Chat({ history = [] }) {
     }))
   )
   const [isTyping, setIsTyping] = useState(false)
-  const messagesEndRef = useRef(null)
-  const inputRef = useRef(null)
   const [input, setInput] = useState('')
+  const [isLoadingOlder, setIsLoadingOlder] = useState(false)
+  const [hasMore, setHasMore] = useState(history.length >= PAGE_SIZE)
+  const [oldestId, setOldestId] = useState(history.length > 0 ? history[0].id : null)
 
+  const messagesContainerRef = useRef(null)
+  const inputRef = useRef(null)
+  const sentinelRef = useRef(null)
+  const wasAtBottom = useRef(true)
+
+  // Auto scroll to bottom on new messages (only if user was at bottom)
   useEffect(() => {
-    scrollToBottom()
+    if (wasAtBottom.current && messages.length > 0) {
+      scrollToBottom('instant')
+    }
   }, [messages])
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  // Observer for detecting when user was at bottom
+  useEffect(() => {
+    const container = messagesContainerRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container
+      wasAtBottom.current = scrollHeight - scrollTop - clientHeight < 100
+    }
+
+    container.addEventListener('scroll', handleScroll)
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Intersection observer for loading older messages
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingOlder) {
+          loadOlderMessages()
+        }
+      },
+      { root: messagesContainerRef.current, rootMargin: '50px 0px 0px 0px' }
+    )
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [hasMore, isLoadingOlder, oldestId])
+
+  const scrollToBottom = (behavior = 'smooth') => {
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior })
+    }
+  }
+
+  const loadOlderMessages = async () => {
+    if (!oldestId || isLoadingOlder) return
+    setIsLoadingOlder(true)
+
+    try {
+      const response = await axios.get(route('chat.history'), {
+        params: { before: oldestId, limit: PAGE_SIZE }
+      })
+
+      const olderMessages = response.data.messages || []
+      if (olderMessages.length === 0) {
+        setHasMore(false)
+      } else {
+        const mapped = olderMessages.map(h => ({
+          id: h.id,
+          role: h.role,
+          content: h.content,
+          quick_replies: h.quick_replies || [],
+          parsed: h.parsed
+        }))
+
+        // Save current scroll height before adding messages
+        const container = messagesContainerRef.current
+        const prevScrollHeight = container ? container.scrollHeight : 0
+
+        setMessages(prev => [...mapped, ...prev])
+        setOldestId(olderMessages[olderMessages.length - 1].id)
+
+        // Restore scroll position after messages are added
+        requestAnimationFrame(() => {
+          if (container) {
+            const newScrollHeight = container.scrollHeight
+            container.scrollTop = newScrollHeight - prevScrollHeight
+          }
+        })
+      }
+    } catch (error) {
+      console.error('Failed to load older messages:', error)
+    } finally {
+      setIsLoadingOlder(false)
+    }
   }
 
   const sendMessage = async (text) => {
@@ -35,6 +124,9 @@ export default function Chat({ history = [] }) {
 
     setMessages(prev => [...prev, { role: 'user', content: userMessage }])
     setIsTyping(true)
+
+    // Scroll to bottom when sending message
+    requestAnimationFrame(() => scrollToBottom())
 
     try {
       const response = await axios.post(route('chat.process'), {
@@ -50,6 +142,9 @@ export default function Chat({ history = [] }) {
         quick_replies: quickReplies,
         parsed: response.data.parsed
       }])
+
+      // Scroll to bottom after AI response
+      requestAnimationFrame(() => scrollToBottom())
     } catch (error) {
       setMessages(prev => [...prev, {
         role: 'assistant',
@@ -78,7 +173,10 @@ export default function Chat({ history = [] }) {
 
       <div className="flex flex-col h-[calc(100vh-8rem)]">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto px-2 py-4 space-y-4 custom-scrollbar">
+        <div
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto px-2 py-4 space-y-4 custom-scrollbar"
+        >
           {messages.length === 0 && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-xs">
@@ -91,10 +189,22 @@ export default function Chat({ history = [] }) {
             </div>
           )}
 
+          {/* Sentinel for infinite scroll */}
+          <div ref={sentinelRef} className="h-1" />
+          {isLoadingOlder && (
+            <div className="flex justify-center py-2">
+              <div className="flex gap-1.5">
+                <span className="w-2 h-2 bg-[#727785] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-[#727785] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-[#727785] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              </div>
+            </div>
+          )}
+
           <AnimatePresence>
             {messages.map((msg, idx) => (
               <motion.div
-                key={idx}
+                key={msg.id || idx}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={cn(
@@ -148,8 +258,6 @@ export default function Chat({ history = [] }) {
               </div>
             </motion.div>
           )}
-
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}

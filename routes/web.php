@@ -59,6 +59,7 @@ Route::middleware(['auth', 'licensed'])->group(function () {
 
 // AI Chat API endpoint (outside licensed middleware to avoid Inertia JSON conflict)
 Route::middleware('auth')->post('/chat/process', [AiChatController::class, 'process'])->name('chat.process');
+Route::middleware('auth')->get('/chat/history', [AiChatController::class, 'history'])->name('chat.history');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

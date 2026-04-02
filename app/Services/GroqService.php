@@ -24,7 +24,6 @@ class GroqService
     {
         $lowerMessage = strtolower($message);
 
-        // Handle Confirmation
         if ($lowerMessage === 'ok' && session()->has('pending_transaction')) {
             return $this->confirmTransaction();
         }
@@ -38,11 +37,13 @@ class GroqService
             ];
         }
 
+        $monthYear = $this->detectMonthYear($message);
+
         try {
-            $financialContext = $this->getFinancialContext();
+            $financialContext = $this->getFinancialContext($monthYear['month'], $monthYear['year']);
             $categories = Category::all(['id', 'name', 'type', 'icon', 'color']);
 
-            $systemPrompt = $this->buildSystemPrompt($categories, $financialContext);
+            $systemPrompt = $this->buildSystemPrompt($categories, $financialContext, $monthYear);
 
             $messages = [
                 ['role' => 'system', 'content' => $systemPrompt],
@@ -76,32 +77,75 @@ class GroqService
         return $this->fallbackNlp($message);
     }
 
-    protected function getFinancialContext(): array
+    protected function detectMonthYear(string $message): array
+    {
+        $now = Carbon::now();
+        $lower = strtolower($message);
+
+        $months = [
+            'januari' => 1, 'februari' => 2, 'maret' => 3, 'april' => 4, 'mei' => 5, 'juni' => 6,
+            'juli' => 7, 'agustus' => 8, 'september' => 9, 'oktober' => 10, 'november' => 11, 'desember' => 12,
+            'jan' => 1, 'feb' => 2, 'mar' => 3, 'apr' => 4, 'jun' => 6, 'jul' => 7, 'agu' => 8, 'sep' => 9, 'okt' => 10, 'nov' => 11, 'des' => 12,
+        ];
+
+        $month = null;
+        $year = $now->year;
+
+        foreach ($months as $name => $num) {
+            if (str_contains($lower, $name)) {
+                $month = $num;
+                break;
+            }
+        }
+
+        if (preg_match('/\b(20\d{2})\b/', $message, $matches)) {
+            $year = (int) $matches[1];
+        }
+
+        if (str_contains($lower, 'bulan ini') || str_contains($lower, 'bulan sekarang')) {
+            $month = $now->month;
+        } elseif (str_contains($lower, 'bulan lalu')) {
+            $month = $now->copy()->subMonth()->month;
+            if ($month === 12) {
+                $year = $now->year - 1;
+            }
+        }
+
+        if (! $month) {
+            $month = $now->month;
+        }
+
+        return ['month' => $month, 'year' => $year];
+    }
+
+    protected function getFinancialContext(int $month, int $year): array
     {
         $userId = auth()->id();
         $now = Carbon::now();
+        $monthName = Carbon::create()->month($month)->translatedFormat('F');
 
-        $totalIncome = Transaction::where('user_id', $userId)
-            ->where('type', 'income')
-            ->sum('amount');
-
-        $totalExpense = Transaction::where('user_id', $userId)
-            ->where('type', 'expense')
-            ->sum('amount');
-
+        $totalIncome = Transaction::where('user_id', $userId)->where('type', 'income')->sum('amount');
+        $totalExpense = Transaction::where('user_id', $userId)->where('type', 'expense')->sum('amount');
         $balance = $totalIncome - $totalExpense;
 
-        $thisMonthIncome = Transaction::where('user_id', $userId)
+        $monthIncome = Transaction::where('user_id', $userId)
             ->where('type', 'income')
-            ->whereMonth('transaction_date', $now->month)
-            ->whereYear('transaction_date', $now->year)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
             ->sum('amount');
 
-        $thisMonthExpense = Transaction::where('user_id', $userId)
+        $monthExpense = Transaction::where('user_id', $userId)
             ->where('type', 'expense')
-            ->whereMonth('transaction_date', $now->month)
-            ->whereYear('transaction_date', $now->year)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
             ->sum('amount');
+
+        $monthTxCount = Transaction::where('user_id', $userId)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
+            ->count();
+
+        $savingsRate = $monthIncome > 0 ? round((($monthIncome - $monthExpense) / $monthIncome) * 100, 1) : 0;
 
         $recentTransactions = Transaction::with('category')
             ->where('user_id', $userId)
@@ -112,7 +156,7 @@ class GroqService
                 return [
                     'type' => $t->type,
                     'amount' => $t->amount,
-                    'description' => $t->description,
+                    'description' => $t->description ?: '-',
                     'category' => $t->category?->name ?? '-',
                     'date' => Carbon::parse($t->transaction_date)->translatedFormat('d M Y'),
                 ];
@@ -120,8 +164,8 @@ class GroqService
 
         $topCategories = Transaction::selectRaw('category_id, type, SUM(amount) as total')
             ->where('user_id', $userId)
-            ->whereMonth('transaction_date', $now->month)
-            ->whereYear('transaction_date', $now->year)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
             ->groupBy('category_id', 'type')
             ->orderByDesc('total')
             ->limit(5)
@@ -135,18 +179,58 @@ class GroqService
                 ];
             });
 
+        // All transactions for table
+        $allTransactions = Transaction::with('category')
+            ->where('user_id', $userId)
+            ->orderByDesc('transaction_date')
+            ->limit(50)
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'date' => Carbon::parse($t->transaction_date)->translatedFormat('d M Y'),
+                    'type' => $t->type,
+                    'category' => $t->category?->name ?? '-',
+                    'description' => $t->description ?: '-',
+                    'amount' => $t->amount,
+                ];
+            });
+
+        $categorySummary = Transaction::selectRaw('category_id, type, SUM(amount) as total, COUNT(*) as count')
+            ->where('user_id', $userId)
+            ->groupBy('category_id', 'type')
+            ->orderByDesc('total')
+            ->with('category')
+            ->get()
+            ->map(function ($t) {
+                $typeLabel = $t->type === 'income' ? 'Pemasukan' : 'Pengeluaran';
+                $cat = $t->category?->name ?? '-';
+
+                return [
+                    'category' => $cat,
+                    'type' => $typeLabel,
+                    'total' => $t->total,
+                    'count' => $t->count,
+                ];
+            });
+
         return [
             'total_income' => $totalIncome,
             'total_expense' => $totalExpense,
             'balance' => $balance,
-            'this_month_income' => $thisMonthIncome,
-            'this_month_expense' => $thisMonthExpense,
+            'month_income' => $monthIncome,
+            'month_expense' => $monthExpense,
+            'month_name' => $monthName,
+            'year' => $year,
+            'month_tx_count' => $monthTxCount,
+            'savings_rate' => $savingsRate,
             'recent_transactions' => $recentTransactions,
             'top_categories' => $topCategories,
+            'all_transactions' => $allTransactions,
+            'category_summary' => $categorySummary,
         ];
     }
 
-    protected function buildSystemPrompt($categories, $context): string
+    protected function buildSystemPrompt($categories, $context, $monthYear): string
     {
         $catList = $categories->map(function ($cat) {
             $typeLabel = $cat->type === 'income' ? 'Pemasukan' : 'Pengeluaran';
@@ -155,11 +239,31 @@ class GroqService
         })->implode("\n");
 
         $ctx = $context;
-        $incomeFormatted = number_format($ctx['total_income'], 0, ',', '.');
-        $expenseFormatted = number_format($ctx['total_expense'], 0, ',', '.');
-        $balanceFormatted = number_format($ctx['balance'], 0, ',', '.');
-        $monthIncome = number_format($ctx['this_month_income'], 0, ',', '.');
-        $monthExpense = number_format($ctx['this_month_expense'], 0, ',', '.');
+        $incomeFmt = number_format($ctx['total_income'], 0, ',', '.');
+        $expenseFmt = number_format($ctx['total_expense'], 0, ',', '.');
+        $balanceFmt = number_format($ctx['balance'], 0, ',', '.');
+        $monthIncomeFmt = number_format($ctx['month_income'], 0, ',', '.');
+        $monthExpenseFmt = number_format($ctx['month_expense'], 0, ',', '.');
+        $monthName = $ctx['month_name'];
+        $year = $ctx['year'];
+        $txCount = $ctx['month_tx_count'];
+        $savingsRate = $ctx['savings_rate'];
+
+        // Analysis
+        $analysis = '';
+        if ($ctx['month_income'] > 0) {
+            if ($savingsRate >= 30) {
+                $analysis = "🌟 Kamu RAJIN MENABUNG! Tingkat tabungan {$savingsRate}% dari pemasukan.";
+            } elseif ($savingsRate >= 10) {
+                $analysis = "👍 Cukup baik. Tingkat tabungan {$savingsRate}%. Bisa ditingkatkan lagi.";
+            } elseif ($savingsRate >= 0) {
+                $analysis = "⚠️ Cukup boros. Hanya {$savingsRate}% yang ditabung. Coba kurangi pengeluaran tidak penting.";
+            } else {
+                $analysis = '🚨 BOROS! Pengeluaran melebihi pemasukan. Segera evaluasi keuanganmu!';
+            }
+        } else {
+            $analysis = '📊 Belum ada data pemasukan bulan ini.';
+        }
 
         $recentTx = $ctx['recent_transactions']->map(function ($t) {
             $emoji = $t['type'] === 'income' ? '💰' : '💸';
@@ -173,38 +277,66 @@ class GroqService
             return "{$emoji} {$t['category']}: Rp ".number_format($t['total'], 0, ',', '.');
         })->implode("\n") ?: 'Belum ada data.';
 
-        $hasData = $ctx['this_month_income'] > 0 || $ctx['this_month_expense'] > 0;
-        $dataLabel = $hasData ? 'Ada data' : 'Belum ada data';
+        $txTableRows = $ctx['all_transactions']->map(function ($t) {
+            $typeLabel = $t['type'] === 'income' ? 'Pemasukan' : 'Pengeluaran';
+
+            return "| {$t['date']} | {$typeLabel} | {$t['category']} | {$t['description']} | Rp ".number_format($t['amount'], 0, ',', '.').' |';
+        })->implode("\n") ?: '| - | - | - | - | - |';
+
+        $catTableRows = $ctx['category_summary']->map(function ($t) {
+            return "| {$t['category']} | {$t['type']} | Rp ".number_format($t['total'], 0, ',', '.')." | {$t['count']}x |";
+        })->implode("\n") ?: '| - | - | - | - |';
 
         return <<<PROMPT
 Kamu adalah asisten keuangan keluarga yang ramah dan membantu. Bahasa: Indonesia.
 
-DATA KEUANGAN USER (WAJIB GUNAKAN DATA INI):
-━━━━━━━━━━━━━━━━
-💰 Total Pemasukan: Rp {$incomeFormatted}
-💸 Total Pengeluaran: Rp {$expenseFormatted}
-💵 Saldo Tersedia: Rp {$balanceFormatted}
+📅 PERIODE: {$monthName} {$year}
 
-📊 Bulan Ini ({$dataLabel}):
-- Pemasukan: Rp {$monthIncome}
-- Pengeluaran: Rp {$monthExpense}
+═══════════════════════════════════════
+💰 RINGKASAN KEUANGAN
+═══════════════════════════════════════
+💵 Saldo Tersedia: Rp {$balanceFmt}
+📈 Total Pemasukan: Rp {$incomeFmt}
+📉 Total Pengeluaran: Rp {$expenseFmt}
 
-📋 5 Transaksi Terakhir:
+📊 {$monthName} {$year} ({$txCount} transaksi):
+💰 Pemasukan: Rp {$monthIncomeFmt}
+💸 Pengeluaran: Rp {$monthExpenseFmt}
+🏦 Tingkat Tabungan: {$savingsRate}%
+
+🔍 ANALISIS:
+{$analysis}
+
+📋 TRANSAKSI TERAKHIR:
 {$recentTx}
 
-📈 Kategori Teratas Bulan Ini:
+📈 KATEGORI TERATAS:
 {$topCat}
-━━━━━━━━━━━━━━━━
+
+═══════════════════════════════════════
+📊 TABEL TRANSAKSI (50 terakhir)
+═══════════════════════════════════════
+| Tanggal | Tipe | Kategori | Keterangan | Nominal |
+|---------|------|----------|------------|---------|
+{$txTableRows}
+
+═══════════════════════════════════════
+📊 RINGKASAN PER KATEGORI
+═══════════════════════════════════════
+| Kategori | Tipe | Total | Frekuensi |
+|----------|------|-------|-----------|
+{$catTableRows}
+
+═══════════════════════════════════════
 
 ATURAN:
-1. Jika user tanya tentang saldo, pemasukan, pengeluaran, atau laporan → JAWAB LANGSUNG dengan data di atas. JANGAN return JSON.
-2. Jika user catat transaksi (ada nominal) → return JSON format di bawah.
-3. Jika user tanya hal lain → jawab ramah, JANGAN return JSON.
+1. Jika user minta laporan → tampilkan ringkasan dengan emoji & analisis. JANGAN return JSON.
+2. Jika user tanya saldo/pemasukan/pengeluaran → jawab langsung dengan data di atas.
+3. Jika user catat transaksi (ada nominal) → return JSON format di bawah.
+4. Jika user tanya hal lain → jawab ramah, JANGAN return JSON.
 
 FORMAT JSON HANYA UNTUK PENCATATAN TRANSAKSI:
-```json
 {"action":"record_transaction","type":"income/expense","amount":25000,"category_id":1,"category_name":"Makanan","description":"Makan siang","transaction_date":"2026-04-02 12:00:00","confirmation_message":"Oke, saya catat:\n━━━━━━━━━━━━━━━━\n💸 Pengeluaran\n📦 Makanan\n📝 Makan siang\n💵 Rp 25.000\n🕐 02 Apr 2026, 12:00\n━━━━━━━━━━━━━━━━\nSudah benar? Ketik OK untuk simpan."}
-```
 
 DAFTAR KATEGORI:
 {$catList}
@@ -213,8 +345,8 @@ PENTING:
 - Default type = "expense" kecuali user sebut "pemasukan", "gaji", "masuk", "dapat"
 - "rb"/"ribu"/"k" = ×1000, "jt"/"juta" = ×1000000
 - Jika tidak yakin kategori, gunakan "Lainnya"
-- Gunakan emoji: 💰💸📦📝💵🕐
-- JANGAN pernah mengarang data keuangan. Gunakan data yang diberikan.
+- Gunakan emoji untuk memperindah: 💰💸📦📝💵🕐📊📈📉🏦🔍🌟👍⚠️🚨
+- JANGAN pernah mengarang data. Gunakan data yang diberikan.
 PROMPT;
     }
 
@@ -234,7 +366,6 @@ PROMPT;
             }
         }
 
-        // No JSON = free conversation
         return [
             'message' => $content,
             'quick_replies' => [],
@@ -243,7 +374,6 @@ PROMPT;
 
     protected function extractJson(string $content): ?array
     {
-        // Try code block first
         if (preg_match('/```json\s*(.*?)\s*```/s', $content, $m)) {
             $d = json_decode($m[1], true);
             if ($d) {
@@ -251,7 +381,6 @@ PROMPT;
             }
         }
 
-        // Find balanced braces
         $start = strpos($content, '{');
         if ($start === false) {
             return null;

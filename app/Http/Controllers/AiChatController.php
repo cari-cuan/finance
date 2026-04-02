@@ -23,14 +23,38 @@ class AiChatController extends Controller
         $categories = Category::all(['id', 'name', 'type', 'icon', 'color']);
         $accounts = Account::where('user_id', auth()->id())->get();
         $history = ChatMessage::where('user_id', auth()->id())
-            ->orderBy('created_at', 'asc')
-            ->limit(50)
-            ->get();
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->reverse()
+            ->values();
 
         return Inertia::render('Chat', [
             'categories' => $categories,
             'accounts' => $accounts,
             'history' => $history,
+        ]);
+    }
+
+    public function history(Request $request)
+    {
+        $request->validate([
+            'before' => 'nullable|integer',
+            'limit' => 'nullable|integer|max:20',
+        ]);
+
+        $query = ChatMessage::where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc');
+
+        if ($request->before) {
+            $query->where('id', '<', $request->before);
+        }
+
+        $messages = $query->limit($request->limit ?? 10)->get();
+
+        return response()->json([
+            'messages' => $messages,
+            'has_more' => $messages->count() >= ($request->limit ?? 10),
         ]);
     }
 
