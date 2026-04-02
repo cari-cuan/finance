@@ -28,13 +28,23 @@ class GroqService
             return $this->confirmTransaction();
         }
 
-        if ($lowerMessage === 'batal' && session()->has('pending_transaction')) {
+        if (in_array($lowerMessage, ['batal', 'batalkan', 'cancel']) && session()->has('pending_transaction')) {
             session()->forget('pending_transaction');
 
             return [
                 'message' => 'Transaksi dibatalkan. Ada yang bisa saya bantu lagi?',
                 'quick_replies' => [],
             ];
+        }
+
+        // Handle "hapus" - delete last transaction
+        if (in_array($lowerMessage, ['hapus', 'hapus terakhir', 'hapus transaksi', 'delete'])) {
+            return $this->deleteLastTransaction();
+        }
+
+        // Handle "edit" - edit last transaction
+        if (str_starts_with($lowerMessage, 'edit') || str_starts_with($lowerMessage, 'ubah')) {
+            return $this->editLastTransaction($message);
         }
 
         $monthYear = $this->detectMonthYear($message);
@@ -509,6 +519,87 @@ PROMPT;
 
         return [
             'message' => 'Transaksi berhasil disimpan! ✅',
+            'quick_replies' => [],
+        ];
+    }
+
+    protected function deleteLastTransaction(): array
+    {
+        $lastTx = Transaction::where('user_id', auth()->id())
+            ->orderByDesc('created_at')
+            ->first();
+
+        if (! $lastTx) {
+            return [
+                'message' => 'Tidak ada transaksi untuk dihapus.',
+                'quick_replies' => [],
+            ];
+        }
+
+        $emoji = $lastTx->type === 'income' ? '💰' : '💸';
+        $typeLabel = $lastTx->type === 'income' ? 'Pemasukan' : 'Pengeluaran';
+        $amountFmt = 'Rp '.number_format($lastTx->amount, 0, ',', '.');
+        $dateFmt = Carbon::parse($lastTx->transaction_date)->translatedFormat('d M Y');
+
+        $lastTx->delete();
+
+        $catName = $lastTx->category?->name ?? '-';
+
+        return [
+            'message' => "Transaksi terakhir dihapus:\n━━━━━━━━━━━━━━━━\n{$emoji} {$typeLabel}\n📦 {$catName}\n📝 {$lastTx->description}\n💵 {$amountFmt}\n🕐 {$dateFmt}\n━━━━━━━━━━━━━━━━\nSudah dihapus dari catatan.",
+            'quick_replies' => [],
+        ];
+    }
+
+    protected function editLastTransaction(string $message): array
+    {
+        $lastTx = Transaction::where('user_id', auth()->id())
+            ->orderByDesc('created_at')
+            ->first();
+
+        if (! $lastTx) {
+            return [
+                'message' => 'Tidak ada transaksi untuk diedit.',
+                'quick_replies' => [],
+            ];
+        }
+
+        $emoji = $lastTx->type === 'income' ? '💰' : '💸';
+        $typeLabel = $lastTx->type === 'income' ? 'Pemasukan' : 'Pengeluaran';
+        $amountFmt = 'Rp '.number_format($lastTx->amount, 0, ',', '.');
+        $dateFmt = Carbon::parse($lastTx->transaction_date)->translatedFormat('d M Y');
+
+        $cleanMsg = preg_replace('/^(edit|ubah)\s*/i', '', $message);
+
+        $nlp = new NlpParsingService;
+        $parsed = $nlp->parse($cleanMsg);
+
+        if ($parsed && isset($parsed['amount']) && $parsed['amount'] > 0) {
+            $lastTx->update([
+                'type' => $parsed['type'],
+                'amount' => $parsed['amount'],
+                'category_id' => $parsed['category_id'] ?? $lastTx->category_id,
+                'description' => $parsed['description'],
+                'transaction_date' => $parsed['transaction_date'],
+            ]);
+
+            $newAmountFmt = 'Rp '.number_format($parsed['amount'], 0, ',', '.');
+            $newTypeLabel = $parsed['type'] === 'income' ? 'Pemasukan' : 'Pengeluaran';
+            $newEmoji = $parsed['type'] === 'income' ? '💰' : '💸';
+
+            $newCatName = $parsed['category_name'] ?? ($lastTx->category?->name ?? '-');
+            $newDate = $parsed['transaction_date'];
+
+            return [
+                'message' => "Transaksi terakhir diedit:\n━━━━━━━━━━━━━━━━\n{$newEmoji} {$newTypeLabel}\n📦 {$newCatName}\n📝 {$parsed['description']}\n💵 {$newAmountFmt}\n🕐 {$newDate}\n━━━━━━━━━━━━━━━━\nSudah diperbarui! ✅",
+                'quick_replies' => [],
+            ];
+        }
+
+        $catName2 = $lastTx->category?->name ?? '-';
+
+        return [
+            'message' => "Transaksi terakhir kamu:\n━━━━━━━━━━━━━━━━\n{$emoji} {$typeLabel}\n📦 {$catName2}\n📝 {$lastTx->description}\n💵 {$amountFmt}\n🕐 {$dateFmt}\n━━━━━━━━━━━━━━━━\nUntuk edit, ketik: \"edit [deskripsi baru] [nominal]\"\nContoh: \"edit makan bakso 30rb\"",
             'quick_replies' => [],
         ];
     }
